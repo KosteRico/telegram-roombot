@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group 'com.kosterico'
+version '1.0'
+
+compileJava.options.encoding('UTF-8')
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.6'
+    compile group: 'joda-time', name: 'joda-time', version: '2.10.4'
+    compile group: 'org.telegram', name: 'telegrambots', version: '4.4.0.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'main.Main'
+    }
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+testClasses.dependsOn(fatJar)
+
+compileJava.dependsOn clean
