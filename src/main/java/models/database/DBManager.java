@@ -29,19 +29,14 @@ public class DBManager {
 
         try {
             connection = getConnection();
-        } catch (SQLException | URISyntaxException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private static Connection getConnection() throws URISyntaxException, SQLException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-
-        return DriverManager.getConnection(dbUrl, username, password);
+    private static Connection getConnection() throws SQLException {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        return DriverManager.getConnection(dbUrl);
     }
 
     public static DBManager getInstance() {
