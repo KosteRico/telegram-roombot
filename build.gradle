@@ -33,6 +33,6 @@ task fatJar(type: Jar) {
     with jar
 }
 
-testClasses.dependsOn(fatJar)
+task stage(dependsOn: ['build', 'clean', 'fatJar'])
+build.mustRunAfter clean
 
-compileJava.dependsOn clean
